@@ -251,12 +251,20 @@ export function FactualityBadge({ factuality }: { factuality?: FactualityScore |
   );
 }
 
+// Shown on the calibration tags so the indigo chip can't be misread as a "top pick" —
+// calibration is a bar-setting sample, not a ranking. Keep wording in sync with the
+// Calibration set card on the role page.
+export const CALIBRATION_HINT =
+  "Sent up front as a deliberate spread to calibrate the bar — not a ranking or endorsement.";
+
 export function Tag({
   children,
   tone = "slate",
+  title,
 }: {
   children: React.ReactNode;
   tone?: "slate" | "amber" | "indigo";
+  title?: string;
 }) {
   const tones = {
     slate: "bg-slate-100 text-slate-600",
@@ -264,7 +272,7 @@ export function Tag({
     indigo: "bg-indigo-50 text-indigo-700",
   };
   return (
-    <span className={cn("inline-flex rounded px-2 py-0.5 text-xs font-medium", tones[tone])}>
+    <span title={title} className={cn("inline-flex rounded px-2 py-0.5 text-xs font-medium", tones[tone])}>
       {children}
     </span>
   );

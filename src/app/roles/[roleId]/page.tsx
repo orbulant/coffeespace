@@ -47,8 +47,10 @@ export default async function RolePage({
           <h2 className="text-sm font-semibold text-indigo-900">Calibration set</h2>
           <p className="mt-1 text-sm text-indigo-800/90">
             The recruiter sent {calibration.map((c) => c.name).join(", ")} first — a deliberate
-            spread (a clear strong, a comp-flag, and a stretch) to align on the bar before reviewing
-            the full pipeline. Worth calibrating on these before deciding the rest.
+            spread, from a clear strong down to a stretch, to help you pin down where your bar sits
+            before reviewing the full pipeline. Being in this set isn&apos;t a ranking or an
+            endorsement; the point is the range. Calibrate on these, then judge the rest against the
+            bar you set here.
           </p>
         </Card>
       )}

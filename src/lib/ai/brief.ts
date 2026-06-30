@@ -39,13 +39,30 @@ function renderSources(sources: Source[]): string {
     .join("\n\n");
 }
 
+// Honest framing for a calibration candidate. Membership in the calibration set is a
+// deliberately WIDE spread the recruiter uses to help the client locate the bar — it is
+// NOT a quality signal, so this block must not push the assessment up or down. It only
+// tells the model to be concrete about where the candidate lands, and explicit that the
+// HARD STOPS rule is untouched.
+function renderCalibration(c: Candidate): string {
+  if (!c.calibration) return "";
+  return `# CALIBRATION CANDIDATE — READ FIRST
+This candidate is one of the recruiter's calibration picks for this role: a small set sent up front, chosen as a deliberately WIDE spread (from a clear yes down to a deliberate stretch) so the client can pin down where their bar actually sits before reviewing the full pipeline.
+What this changes about how you write the brief:
+- Membership in the calibration set is NOT an endorsement and NOT a strike. Do not raise or lower your assessment because of it — assess strictly on the record, exactly as the hard rules demand.
+- The client is using this person to DEFINE the bar, so be unusually concrete about where they land against the role's must-haves and WHY. The specific gap or specific strength is the signal the client is calibrating on; vague "good fit / not a fit" language is useless here.
+- A wide calibration spread means the client has not committed to a strict cutoff yet, so lay out the trade-offs plainly and leave the pass/fail call to the client rather than forcing one. This does NOT relax HARD STOPS: a real disqualifier (comp above band, sponsorship the role can't offer) is still a hard_stop — surface it, never soften it.
+
+`;
+}
+
 function renderPrompt(input: BriefInput): string {
   const { candidate: c, role: r, feedback, clientPreferences: prefs, sources } = input;
   const memo = c.recruiterMemo
     ? JSON.stringify(c.recruiterMemo, null, 2)
     : "(none — this candidate has no recruiter memo; you may need to generate the assessment from scratch)";
 
-  return `# CLIENT HIRING CONTEXT
+  return `${renderCalibration(c)}# CLIENT HIRING CONTEXT
 Company: ${input.clientCompany}
 Hiring philosophy: ${prefs?.hiring_philosophy?.join(" | ") ?? "n/a"}
 Past client feedback (recurring themes): ${prefs?.past_feedback?.join(" | ") ?? "n/a"}

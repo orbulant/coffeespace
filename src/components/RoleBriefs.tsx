@@ -15,6 +15,7 @@ import {
   MomentumMeter,
   FactualityBadge,
   Tag,
+  CALIBRATION_HINT,
   cn,
 } from "./ui";
 
@@ -135,7 +136,11 @@ function CandidateRow({
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <span className="font-semibold text-slate-900">{c.name}</span>
-              {c.calibration && <Tag tone="indigo">calibration</Tag>}
+              {c.calibration && (
+                <Tag tone="indigo" title={CALIBRATION_HINT}>
+                  Calibration
+                </Tag>
+              )}
             </div>
             <p className="truncate text-xs text-slate-500">{c.headline}</p>
             <p className="mt-0.5 text-xs text-slate-500">

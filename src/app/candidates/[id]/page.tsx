@@ -8,6 +8,7 @@ import {
   MomentumMeter,
   SectionTitle,
   Tag,
+  CALIBRATION_HINT,
   Field,
 } from "@/components/ui";
 import { DecisionBar } from "@/components/DecisionBar";
@@ -64,7 +65,11 @@ export default async function CandidatePage({
         <div className="mt-2 flex flex-wrap items-center gap-3">
           <h1 className="text-2xl font-semibold tracking-tight">{c.name}</h1>
           <StageBadge stage={c.stage} />
-          {c.calibration && <Tag tone="indigo">calibration set</Tag>}
+          {c.calibration && (
+            <Tag tone="indigo" title={CALIBRATION_HINT}>
+              Calibration
+            </Tag>
+          )}
         </div>
         <p className="mt-1 text-sm text-slate-600">
           {c.headline}
