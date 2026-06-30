@@ -1,10 +1,20 @@
 import Link from "next/link";
-import { getOverview, getRecentDigests, type EnrichedCandidate } from "@/lib/data";
+import {
+  getOverview,
+  getRecentDigests,
+  type EnrichedCandidate,
+} from "@/lib/data";
 import { sortBySeverity } from "@/lib/rules";
 import { Card, FlagList, StageBadge, SectionTitle } from "@/components/ui";
 import { AttentionDigest } from "@/components/AttentionDigest";
 import { RetrospectPanel } from "@/components/RetrospectPanel";
-import { eventLabel, formatBand, relativeDays, stageLabel, STAGE_ORDER } from "@/lib/format";
+import {
+  eventLabel,
+  formatBand,
+  relativeDays,
+  stageLabel,
+  STAGE_ORDER,
+} from "@/lib/format";
 import { momentumRollup } from "@/lib/momentum";
 import type { Stage } from "@/db/schema";
 
@@ -22,22 +32,27 @@ export default async function OverviewPage() {
 
   const attention = sortBySeverity(
     candidates.filter(
-      (c) => c.stage !== "rejected" && c.flags.some((f) => f.severity !== "info"),
+      (c) =>
+        c.stage !== "rejected" && c.flags.some((f) => f.severity !== "info"),
     ),
   );
 
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">{client.companyName}</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {client.companyName}
+        </h1>
         {client.description && (
-          <p className="mt-1 max-w-2xl text-sm text-slate-600">{client.description}</p>
+          <p className="mt-1 max-w-2xl text-sm text-slate-600">
+            {client.description}
+          </p>
         )}
       </header>
 
       {/* Roles / pipeline health */}
       <section>
-        <SectionTitle>Open searches</SectionTitle>
+        <SectionTitle>Open Role Searches</SectionTitle>
         <div className="grid gap-4 md:grid-cols-2">
           {roles.map((role) => {
             const roleCands = candidates.filter((c) => c.roleId === role.id);
@@ -58,13 +73,17 @@ export default async function OverviewPage() {
                     {roleCands.length} candidates
                   </span>
                 </div>
-                <p className="mt-2 text-xs text-slate-500">{formatBand(role.compBand)}</p>
+                <p className="mt-2 text-xs text-slate-500">
+                  {formatBand(role.compBand)}
+                </p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   <StageCounts candidates={roleCands} />
                 </div>
                 <div className="mt-3">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="uppercase tracking-wide text-slate-400">Search momentum</span>
+                    <span className="uppercase tracking-wide text-slate-400">
+                      Search momentum
+                    </span>
                     <span className="font-medium text-slate-700">
                       {roll.score} · {roll.label}
                     </span>
@@ -102,7 +121,9 @@ export default async function OverviewPage() {
       <section>
         <SectionTitle>Needs your attention</SectionTitle>
         {attention.length === 0 ? (
-          <Card className="p-5 text-sm text-slate-600">Nothing flagged right now.</Card>
+          <Card className="p-5 text-sm text-slate-600">
+            Nothing flagged right now.
+          </Card>
         ) : (
           <Card className="divide-y divide-slate-100">
             {attention.map((c) => (
@@ -121,7 +142,9 @@ export default async function OverviewPage() {
                   </p>
                 </div>
                 <div className="shrink-0">
-                  <FlagList flags={c.flags.filter((f) => f.severity !== "info")} />
+                  <FlagList
+                    flags={c.flags.filter((f) => f.severity !== "info")}
+                  />
                 </div>
               </Link>
             ))}
@@ -134,15 +157,25 @@ export default async function OverviewPage() {
         <SectionTitle>What changed recently</SectionTitle>
         <Card className="divide-y divide-slate-100">
           {recentEvents.map((e) => (
-            <div key={e.id} className="flex items-center justify-between px-5 py-2.5 text-sm">
+            <div
+              key={e.id}
+              className="flex items-center justify-between px-5 py-2.5 text-sm"
+            >
               <span className="text-slate-700">
-                <Link href={`/candidates/${e.candidateId}`} className="font-medium hover:underline">
+                <Link
+                  href={`/candidates/${e.candidateId}`}
+                  className="font-medium hover:underline"
+                >
                   {e.candidateName}
                 </Link>{" "}
                 — {eventLabel(e.type)}
-                {e.actor ? <span className="text-slate-400"> by {e.actor}</span> : null}
+                {e.actor ? (
+                  <span className="text-slate-400"> by {e.actor}</span>
+                ) : null}
               </span>
-              <span className="text-xs text-slate-400">{relativeDays(e.at)}</span>
+              <span className="text-xs text-slate-400">
+                {relativeDays(e.at)}
+              </span>
             </div>
           ))}
         </Card>
@@ -153,9 +186,11 @@ export default async function OverviewPage() {
 
 function StageCounts({ candidates }: { candidates: EnrichedCandidate[] }) {
   const counts = new Map<Stage, number>();
-  for (const c of candidates) counts.set(c.stage, (counts.get(c.stage) ?? 0) + 1);
+  for (const c of candidates)
+    counts.set(c.stage, (counts.get(c.stage) ?? 0) + 1);
   const present = STAGE_ORDER.filter((s) => counts.has(s));
-  if (!present.length) return <span className="text-xs text-slate-400">No candidates yet</span>;
+  if (!present.length)
+    return <span className="text-xs text-slate-400">No candidates yet</span>;
   return (
     <>
       {present.map((s) => (
@@ -176,7 +211,8 @@ function NotSeeded() {
     <Card className="mx-auto max-w-xl p-8 text-center">
       <h1 className="text-lg font-semibold">No data yet</h1>
       <p className="mt-2 text-sm text-slate-600">
-        The database is reachable but has no client. Create the tables and load the seed:
+        The database is reachable but has no client. Create the tables and load
+        the seed:
       </p>
       <pre className="mt-4 rounded-md bg-slate-900 p-3 text-left text-xs text-slate-100">
         pnpm db:push{"\n"}pnpm db:seed
