@@ -1,0 +1,22 @@
+JORDAN REYES — Recruiter screening call (rough auto-transcript, ~20 min)
+Lightly cleaned. Filler and crosstalk left in on purpose.
+
+RECRUITER: ...so thanks for making time. High level, what's got you looking right now?
+JORDAN: Yeah. Honestly Stripe's great, but the last year and a half I've drifted into
+mostly leading — design reviews, roadmap, mentoring — and I miss building. I want to be
+hands on the keyboard again at something earlier.
+RECRUITER: That's good to hear, because this role is very hands-on, small team, no PM
+holding your hand. Is that a yes for you or...?
+JORDAN: That's exactly what I want. I'll caveat — I haven't worked anywhere below like
+Series C. So I think I'd thrive but I can't pretend I've done the true zero-to-one thing.
+RECRUITER: Fair. On the stack — they're TypeScript front end, Python and some Go backend.
+JORDAN: Backend I'm completely comfortable, Go and Python all day. Front end and TypeScript
+I'm honestly rusty. I can get there but I wouldn't call myself a TS person today.
+RECRUITER: Noted. Comp?
+JORDAN: I'm flexible. Somewhere around 210 base is the ballpark, and I care a lot more about
+equity and the mission than squeezing base.
+RECRUITER: And location — you're open to the SF hybrid thing? Resume says open to relocation.
+JORDAN: Ah — that resume's a little stale. With family stuff this year I really need remote.
+I could do occasional travel to SF but not a regular 2-day-a-week in-office.
+RECRUITER: Okay, that's important, let me flag that. Timeline?
+JORDAN: Four weeks once there's an offer. Quick.

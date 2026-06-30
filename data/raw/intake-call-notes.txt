@@ -1,0 +1,32 @@
+Raw, unedited notes from the recruiter's 30-min role intake call with the client.
+Rambling and unstructured on purpose. This is ideal input for an AI workflow that
+generates a structured hiring brief / role spec.
+
+──────────────────────────────────────────────────────────────────────────────
+Intake call — Tidalwave / Senior Full-Stack Engineer
+On call: Priya (CEO), Marcus (Head of Eng), me
+~June 6
+
+- so they're 22 people, raised ~14M series A last year. building observability for AI
+  agents, very technical product, customers are developers
+- Marcus owns this hire. they have 6 engineers now, want to get to ~10 by EOY
+- this role: "senior full stack" but honestly Marcus kept saying he cares less about the
+  title and more about whether someone can "just go own a surface area without me babysitting"
+- stack is typescript everywhere on frontend, python on backend, some go for the perf-critical
+  ingestion stuff. react. they're on GCP
+- must have: 5+ yrs, strong TS, a real backend language. has SHIPPED and OWNED something end
+  to end. Marcus was very allergic to "ticket takers" — said it like 3 times
+- nice to have: startup experience (seed/series A specifically, not just 'a startup'),
+  dev tools or infra background, comfortable with ambiguity
+- Priya jumped in: culturally they want someone low-ego, high-output, who likes that there's
+  no process yet. she said the failure mode is hiring someone great from a big co who then
+  freezes without a PM and a spec
+- comp: 180-215 base, 0.2-0.5% equity. Priya said for someone exceptional they could stretch
+  equity but not really base
+- location: SF hybrid 2 days, or remote US is fine. Marcus mildly prefers SF
+- HARD constraint: cannot do visa sponsorship right now. they looked into it, not feasible
+  this year. so US work auth required, no sponsorship
+- timeline: they're feeling some urgency, want someone in seat ideally within ~6-8 weeks.
+  Marcus said the eng team is underwater
+- one more thing — Priya said please don't send "resume keyword matches", she wants to
+  understand why each person would actually thrive HERE specifically

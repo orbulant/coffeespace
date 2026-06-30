@@ -1,0 +1,37 @@
+Plain-text resume for one candidate (Amara Okafor, cand_003). Provided as raw text so an
+AI workflow can generate a recruiter-quality write-up / fit summary from it. Note that the
+seed.json record for this candidate intentionally has comp_expectation and availability
+missing — a good write-up should flag what's unknown rather than invent it.
+
+──────────────────────────────────────────────────────────────────────────────
+AMARA OKAFOR
+San Francisco, CA · amara.okafor@example.com · linkedin.com/in/amaraokafor
+
+SUMMARY
+Founding engineer with 0-to-1 experience building and scaling backend systems at an
+early-stage startup through to acquisition. Equally comfortable owning architecture and
+shipping product. Looking for the next early-stage team to build with from the ground up.
+
+EXPERIENCE
+
+Loop  —  Founding Engineer
+Apr 2019 – May 2026 · San Francisco, CA (acquired by Ramp, 2026)
+- First engineering hire. Built the entire backend (payments ledger, API, data pipeline)
+  solo for the first ~14 months before the team grew to 9 engineers.
+- Designed the double-entry ledger system that processed >$400M in transactions.
+- Set up the company's infrastructure on GCP from scratch; owned on-call and reliability.
+- Led the technical due-diligence process during the Ramp acquisition.
+- Languages: Python, Go, TypeScript. Postgres, Redis, GCP, Kubernetes.
+
+Microsoft  —  Software Engineer
+Jul 2016 – Mar 2019 · Redmond, WA
+- Worked on Azure storage team. Shipped features for a distributed blob-storage service.
+- Promoted once. Strong systems fundamentals but limited product ownership.
+
+EDUCATION
+University of Washington — B.S. Computer Science, 2016
+
+NOTES (recruiter call, not on resume)
+- Strongly wants early stage again; explicitly turned down a big-co offer post-acquisition.
+- Did not give a specific comp number on the call — said "let's talk once there's mutual fit."
+- Could not confirm a start date; still wrapping up post-acquisition obligations at Ramp.

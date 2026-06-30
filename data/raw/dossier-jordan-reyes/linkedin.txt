@@ -1,0 +1,19 @@
+JORDAN REYES — LinkedIn profile (scraped text)
+Staff Engineer at Stripe · San Francisco Bay Area · 500+ connections
+
+About
+Systems engineer who likes hard scaling problems. Currently leading the ingestion
+platform at Stripe. Care a lot about reliability, clear writing, and growing engineers.
+
+Experience
+- Stripe · Staff Engineer · 2021 – Present
+- Airbnb · Senior Engineer · 2017 – 2021
+- Plaid · Software Engineer · 2015 – 2017
+
+Skills (endorsed)
+Distributed Systems · Go · Python · Kubernetes · API Design · Mentoring · Technical Leadership
+(Note: TypeScript and front-end are NOT listed among endorsed skills.)
+
+Activity
+- Recently posted: "Why I think most observability tooling is still too noisy for on-call."
+- Commented on several AI-infra and dev-tools posts in the last month.

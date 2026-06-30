@@ -1,0 +1,34 @@
+These are real-style messages a CoffeeSpace recruiter sends a client over Slack today,
+one per candidate. They are unstructured and inconsistent on purpose — this is the
+"before" state the portal is meant to replace. Useful as input for an AI workflow that
+generates structured candidate write-ups, or to test how your model ingests messy data.
+
+──────────────────────────────────────────────────────────────────────────────
+[Recruiter — Mon 9:42 AM]
+hey Priya! got a strong one for the full-stack role. Jordan Reyes, staff eng at
+Stripe right now, was at Airbnb + Plaid before. crazy good on distributed systems,
+literally scaled their ingestion to 100k req/s. one flag — he's been more in a lead
+role last yr or so, so confirm he's cool going hands-on again. comp ~210 base but
+flexible if equity is good. 4 wks notice, US citizen. resume + linkedin in the thread.
+i'd move fast on this one. wdyt?
+
+──────────────────────────────────────────────────────────────────────────────
+[Recruiter — Tue 2:15 PM]
+ok next batch. Wei Chen — senior at Notion, dropbox before that. genuinely excellent
+full stack, owns stuff DB to React, TS wizard. BUT heads up his comp expectation is
+~240 which is over your band, and he's pure big-company, no startup time. immediate
+start, citizen. wanted to flag the comp thing before you spend time. lmk if still worth it
+
+──────────────────────────────────────────────────────────────────────────────
+[Recruiter — Thu 11:03 AM]
+this one i'm excited about. Amara Okafor, founding engineer at Loop (just got acquired
+by Ramp), microsoft before. real 0-to-1, built the whole backend solo first year, went
+through the full acquisition arc. only worked at the one startup so small sample but the
+signal is great. she's between roles so available basically now. don't have her comp number
+yet, will chase. SF based, citizen. think she could be a really good fit for what you're building
+
+──────────────────────────────────────────────────────────────────────────────
+[Recruiter — Fri 4:48 PM]
+Diego Ramos — eng at Datadog, came up through a bootcamp + freelance. perfect domain fit
+(observability!) and super hungry, but real talk he's only ~3 yrs in so probably reads
+junior for a "senior" title. wanted your call on whether stretch is ok. 155 base, 2 wks, citizen

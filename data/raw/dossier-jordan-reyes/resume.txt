@@ -1,0 +1,25 @@
+JORDAN REYES — Resume (plain text)
+Oakland, CA · jordan.reyes@example.com · linkedin.com/in/jordanreyes
+
+SUMMARY
+Staff Engineer with 10+ years building high-scale distributed systems at Stripe, Airbnb,
+and Plaid. Strong systems design and mentorship. Open to relocation for the right team.
+
+EXPERIENCE
+Stripe — Staff Engineer (Mar 2021 – Present) · San Francisco, CA
+- Tech lead for the payments ingestion platform; scaled it to ~100k req/s.
+- Drove the team's reliability roadmap; mentored 4 engineers; ran design reviews.
+- Increasingly in a leadership capacity over the last ~18 months.
+
+Airbnb — Senior Engineer (Jun 2017 – Feb 2021) · San Francisco, CA
+- Built and owned services in the payments and trust org.
+
+Plaid — Software Engineer (Aug 2015 – May 2017) · San Francisco, CA
+- Early-ish engineer; built core API integrations.
+
+EDUCATION
+Carnegie Mellon University — B.S. Computer Science, 2015
+
+PREFERENCES (as stated on resume)
+- Open to relocation.
+- Comfortable onsite, hybrid, or remote.

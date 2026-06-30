@@ -1,0 +1,495 @@
+{
+  "_note": "Raw seed material for the CoffeeSpace take-home. This is DATA, not a schema. Model it however you think is right — add fields, drop fields, restructure. Records are intentionally incomplete, contradictory, and uneven (some candidates have recruiter memos, some don't; some have feedback history, some don't). That reflects reality. See /raw for unstructured artifacts, including a full multi-source dossier for one candidate.",
+
+  "client": {
+    "id": "client_tidalwave",
+    "company_name": "Tidalwave",
+    "description": "Seed-stage (Series A, ~$14M raised) developer-tools startup. 22 people. Building observability for AI agents.",
+    "contacts": [
+      { "name": "Priya Anand", "title": "Co-founder & CEO", "email": "priya@tidalwave.dev", "role": "admin" },
+      { "name": "Marcus Bell", "title": "Head of Engineering", "email": "marcus@tidalwave.dev", "role": "interviewer" }
+    ],
+    "preferences": {
+      "_note": "How this client thinks. Captured by the recruiter over the engagement. This is AI context — it should change how candidates are framed and which concerns get surfaced.",
+      "hiring_philosophy": [
+        "Values ownership over pedigree — a FAANG name is not a plus by itself.",
+        "Explicitly dislikes 'keyword matching' / resume-pattern submissions.",
+        "Wants startup builders comfortable with no process and no PM hand-holding.",
+        "Cares about WHY a specific person would thrive at Tidalwave, not generic fit."
+      ],
+      "response_pattern": "Priya usually responds within ~48 hours. Marcus is slower (3–5 days) when heads-down.",
+      "past_feedback": [
+        "\"We've interviewed 4 ex-Google engineers for past roles. All were too process-heavy for us.\"",
+        "\"I care much more about ownership than FAANG pedigree.\"",
+        "\"The failure mode I'm scared of is someone brilliant who freezes without a spec.\"",
+        "\"Please stop sending people who've only ever taken tickets.\""
+      ]
+    }
+  },
+
+  "calibration_set": {
+    "_note": "Before reviewing the full pipeline for role_fullstack, the recruiter sent these three candidates as a deliberate spread (a clear strong, a comp-flag, and a stretch-junior) to align the client on the bar. The assignment does not tell you what to do with this — that's intentional.",
+    "role_id": "role_fullstack",
+    "candidate_ids": ["cand_001", "cand_002", "cand_004"]
+  },
+
+  "roles": [
+    {
+      "id": "role_fullstack",
+      "client_id": "client_tidalwave",
+      "title": "Senior Full-Stack Engineer",
+      "location": "San Francisco (hybrid, 2 days/wk) or Remote (US)",
+      "comp_band": { "base_min": 180000, "base_max": 215000, "equity": "0.2% – 0.5%" },
+      "employment_type": "Full-time",
+      "must_haves": [
+        "5+ years building production web apps",
+        "Strong TypeScript + a backend language (Python/Go)",
+        "Has owned a system end to end, not just tickets"
+      ],
+      "nice_to_haves": [
+        "Early-stage startup experience (Seed/Series A)",
+        "Dev-tools or infra background",
+        "Comfortable with ambiguity / no PM hand-holding"
+      ],
+      "disqualifiers": [
+        "Needs visa sponsorship (cannot support right now)",
+        "Only big-company experience with no ownership"
+      ],
+      "status": "open",
+      "hiring_manager": "Marcus Bell",
+      "opened_at": "2026-06-08",
+      "target_start": "By ~early August (eng team is underwater)"
+    },
+    {
+      "id": "role_designer",
+      "client_id": "client_tidalwave",
+      "title": "Founding Product Designer",
+      "location": "San Francisco (in-office preferred)",
+      "comp_band": { "base_min": 160000, "base_max": 195000, "equity": "0.5% – 1.0%" },
+      "employment_type": "Full-time",
+      "must_haves": [
+        "Has been the first/only designer somewhere",
+        "Strong product thinking, not just visual polish",
+        "Can ship in Figma and work directly with engineers"
+      ],
+      "nice_to_haves": [
+        "Technical/developer-audience product experience",
+        "Some front-end coding ability"
+      ],
+      "disqualifiers": [
+        "Agency-only background with no product ownership"
+      ],
+      "status": "open",
+      "hiring_manager": "Priya Anand",
+      "opened_at": "2026-06-15"
+    }
+  ],
+
+  "candidates": [
+    {
+      "id": "cand_001",
+      "role_id": "role_fullstack",
+      "name": "Jordan Reyes",
+      "headline": "Staff Engineer at Stripe",
+      "current_company": "Stripe",
+      "current_title": "Staff Engineer",
+      "location": "Oakland, CA",
+      "links": { "resume": "https://example.com/resume/jordan-reyes.pdf", "linkedin": "https://linkedin.com/in/jordanreyes" },
+      "career_history": [
+        { "company": "Stripe", "title": "Staff Engineer", "start": "2021-03", "end": null },
+        { "company": "Airbnb", "title": "Senior Engineer", "start": "2017-06", "end": "2021-02" },
+        { "company": "Plaid", "title": "Software Engineer", "start": "2015-08", "end": "2017-05" }
+      ],
+      "strengths": ["Deep distributed-systems experience", "Scaled ingestion to 100k req/s at Stripe", "Strong written communicator"],
+      "concerns": ["Last 18 months mostly leading, less hands-on coding", "Never worked below Series C — unproven in true early stage"],
+      "comp_expectation": { "base": 210000, "notes": "Flexible on base for more equity" },
+      "availability": "4 weeks notice",
+      "work_authorization": "US Citizen",
+      "stage": "shortlisted",
+      "calibration": true,
+      "recruiter_memo": {
+        "why_we_like": [
+          "Probably the strongest distributed-systems profile we've seen for this role.",
+          "Strong backend infra background, good communicator.",
+          "Comp is within band."
+        ],
+        "concerns": [
+          "Mostly technical leadership recently — need to verify willingness to be hands-on.",
+          "All big-company experience; startup pace is unproven."
+        ],
+        "recommendation": "Advance to HM interview.",
+        "written_by": "Recruiter",
+        "written_at": "2026-06-12"
+      },
+      "feedback_history": [
+        { "author_type": "client", "author": "Marcus Bell", "text": "Strong technically. Genuinely not convinced he'll enjoy startup pace after 11 years at big cos.", "at": "2026-06-15" },
+        { "author_type": "recruiter", "author": "Recruiter", "text": "Fair concern — I'll probe hands-on appetite and startup motivation on the next call.", "at": "2026-06-16" }
+      ],
+      "events": [
+        { "type": "imported", "at": "2026-06-12", "actor": "Recruiter" },
+        { "type": "recruiter_reviewed", "at": "2026-06-12", "actor": "Recruiter" },
+        { "type": "submitted_to_client", "at": "2026-06-13", "actor": "Recruiter" },
+        { "type": "client_opened_profile", "at": "2026-06-14", "actor": "Marcus Bell" },
+        { "type": "client_commented", "at": "2026-06-15", "actor": "Marcus Bell" },
+        { "type": "moved_stage", "at": "2026-06-17", "actor": "Marcus Bell", "from": "reviewing", "to": "shortlisted" }
+      ],
+      "open_questions": [
+        "Is he genuinely willing to go back to hands-on IC work?",
+        "What's driving the move — is startup pace a pull or just novelty?",
+        "His email says remote-only now (see dossier) — does that conflict with the hybrid expectation?"
+      ],
+      "added_at": "2026-06-12"
+    },
+    {
+      "id": "cand_002",
+      "role_id": "role_fullstack",
+      "name": "Wei Chen",
+      "headline": "Senior Engineer at Notion",
+      "current_company": "Notion",
+      "current_title": "Senior Software Engineer",
+      "location": "Remote (Austin, TX)",
+      "links": { "resume": "https://example.com/resume/wei-chen.pdf", "linkedin": "https://linkedin.com/in/weichen" },
+      "career_history": [
+        { "company": "Notion", "title": "Senior Software Engineer", "start": "2020-01", "end": null },
+        { "company": "Dropbox", "title": "Software Engineer", "start": "2016-09", "end": "2019-12" }
+      ],
+      "strengths": ["Full-stack: owns features from DB to React", "TypeScript expert", "Mentored 3 junior eng"],
+      "concerns": ["No early-stage experience", "Comp expectation is above our band", "May be used to more process than we have"],
+      "comp_expectation": { "base": 240000, "notes": "Firm — current TC is ~$250k" },
+      "availability": "Immediate",
+      "work_authorization": "US Citizen",
+      "stage": "reviewing",
+      "calibration": true,
+      "recruiter_memo": {
+        "why_we_like": [
+          "Genuinely excellent full-stack engineer — owns features DB to React.",
+          "TypeScript expert; strong mentor."
+        ],
+        "concerns": [
+          "Comp expectation (~$240k) is above the band and he says it's firm.",
+          "Pure big-company background, no startup time."
+        ],
+        "recommendation": "Borderline — only advance if you're willing to stretch comp. Flagging before you invest time.",
+        "written_by": "Recruiter",
+        "written_at": "2026-06-18"
+      },
+      "feedback_history": [
+        { "author_type": "client", "author": "Priya Anand", "text": "Looks great on paper. Too expensive, and we've been burned by big-co-only folks before.", "at": "2026-06-19" }
+      ],
+      "events": [
+        { "type": "imported", "at": "2026-06-18", "actor": "Recruiter" },
+        { "type": "recruiter_reviewed", "at": "2026-06-18", "actor": "Recruiter" },
+        { "type": "submitted_to_client", "at": "2026-06-18", "actor": "Recruiter" },
+        { "type": "client_opened_profile", "at": "2026-06-19", "actor": "Priya Anand" },
+        { "type": "client_commented", "at": "2026-06-19", "actor": "Priya Anand" }
+      ],
+      "open_questions": [
+        "Any flexibility on comp if the equity is strong? (He says no, but worth one more probe.)",
+        "Would he actually be happy with near-zero process?"
+      ],
+      "added_at": "2026-06-18"
+    },
+    {
+      "id": "cand_003",
+      "role_id": "role_fullstack",
+      "name": "Amara Okafor",
+      "headline": "Founding Engineer at Loop (acquired)",
+      "current_company": "Between roles",
+      "current_title": "Ex-Founding Engineer, Loop",
+      "location": "San Francisco, CA",
+      "links": { "resume": "https://example.com/resume/amara-okafor.pdf", "linkedin": "https://linkedin.com/in/amaraokafor" },
+      "career_history": [
+        { "company": "Loop (acquired by Ramp)", "title": "Founding Engineer", "start": "2019-04", "end": "2026-05" },
+        { "company": "Microsoft", "title": "Software Engineer", "start": "2016-07", "end": "2019-03" }
+      ],
+      "strengths": ["Genuine 0-to-1 founding experience", "Built Loop's entire backend solo for first year", "Just went through an acquisition — knows the full arc"],
+      "concerns": ["Has only ever worked at one startup — small sample", "Might want a founding/lead title we're not offering"],
+      "comp_expectation": null,
+      "availability": null,
+      "work_authorization": "US Citizen",
+      "stage": "new",
+      "recruiter_memo": null,
+      "feedback_history": [
+        { "author_type": "recruiter", "author": "Recruiter", "text": "Holding before submitting — still waiting on her compensation expectations and a confirmed start date.", "at": "2026-06-26" }
+      ],
+      "events": [
+        { "type": "imported", "at": "2026-06-26", "actor": "Recruiter" },
+        { "type": "recruiter_reviewed", "at": "2026-06-26", "actor": "Recruiter" },
+        { "type": "recruiter_awaiting_info", "at": "2026-06-26", "actor": "Recruiter", "detail": "comp + availability" }
+      ],
+      "open_questions": [
+        "Compensation expectations — not yet provided.",
+        "Start date — still wrapping up post-acquisition obligations at Ramp.",
+        "Does she want a 'founding'/lead title we're not offering?"
+      ],
+      "added_at": "2026-06-26"
+    },
+    {
+      "id": "cand_004",
+      "role_id": "role_fullstack",
+      "name": "Diego Ramos",
+      "headline": "Software Engineer at Datadog",
+      "current_company": "Datadog",
+      "current_title": "Software Engineer II",
+      "location": "Remote (Denver, CO)",
+      "links": { "resume": "https://example.com/resume/diego-ramos.pdf", "linkedin": "https://linkedin.com/in/diegoramos" },
+      "career_history": [
+        { "company": "Datadog", "title": "Software Engineer II", "start": "2023-02", "end": null },
+        { "company": "Bootcamp + freelance", "title": "Freelance Developer", "start": "2021-06", "end": "2023-01" }
+      ],
+      "strengths": ["Strong dev-tools/observability domain fit", "Hungry, fast learner", "Good infra fundamentals"],
+      "concerns": ["Only ~3 years total experience — likely too junior for 'Senior'", "No ownership of a full system yet"],
+      "comp_expectation": { "base": 155000, "notes": "" },
+      "availability": "2 weeks notice",
+      "work_authorization": "US Citizen",
+      "stage": "reviewing",
+      "calibration": true,
+      "recruiter_memo": null,
+      "feedback_history": [
+        { "author_type": "client", "author": "Marcus Bell", "text": "Interesting and clearly hungry. Too junior for a senior seat right now, but keep him warm.", "at": "2026-06-22" }
+      ],
+      "events": [
+        { "type": "imported", "at": "2026-06-20", "actor": "Recruiter" },
+        { "type": "recruiter_reviewed", "at": "2026-06-20", "actor": "Recruiter" },
+        { "type": "submitted_to_client", "at": "2026-06-20", "actor": "Recruiter" },
+        { "type": "client_opened_profile", "at": "2026-06-21", "actor": "Marcus Bell" },
+        { "type": "client_commented", "at": "2026-06-22", "actor": "Marcus Bell" }
+      ],
+      "open_questions": [
+        "Is there a more junior role he'd fit, or is this a hard pass for now?",
+        "Has he actually owned anything end to end at Datadog, or only shipped within a team?"
+      ],
+      "added_at": "2026-06-20"
+    },
+    {
+      "id": "cand_005",
+      "role_id": "role_fullstack",
+      "name": "Sana Iqbal",
+      "headline": "Senior Engineer at Coinbase",
+      "current_company": "Coinbase",
+      "current_title": "Senior Software Engineer",
+      "location": "San Francisco, CA",
+      "links": { "resume": "https://example.com/resume/sana-iqbal.pdf", "linkedin": "https://linkedin.com/in/sanaiqbal" },
+      "career_history": [
+        { "company": "Coinbase", "title": "Senior Software Engineer", "start": "2019-11", "end": null },
+        { "company": "Uber", "title": "Software Engineer", "start": "2017-01", "end": "2019-10" }
+      ],
+      "strengths": ["Excellent full-stack range", "Strong systems design in interviews", "Local to SF, happy to be hybrid"],
+      "concerns": ["Requires H-1B transfer / sponsorship"],
+      "comp_expectation": { "base": 200000, "notes": "" },
+      "availability": "4 weeks notice",
+      "work_authorization": "H-1B (requires sponsorship transfer)",
+      "stage": "new",
+      "recruiter_memo": null,
+      "feedback_history": [],
+      "events": [
+        { "type": "imported", "at": "2026-06-25", "actor": "Recruiter" },
+        { "type": "recruiter_reviewed", "at": "2026-06-25", "actor": "Recruiter" },
+        { "type": "recruiter_flagged", "at": "2026-06-25", "actor": "Recruiter", "detail": "sponsorship conflicts with role disqualifier — hold before submitting" }
+      ],
+      "open_questions": [
+        "Role explicitly cannot sponsor — is there any path, or is this a hard stop?",
+        "Should we even submit her, given the stated disqualifier?"
+      ],
+      "added_at": "2026-06-25"
+    },
+    {
+      "id": "cand_006",
+      "role_id": "role_fullstack",
+      "name": "Tom Becker",
+      "headline": "Senior Engineer at Salesforce",
+      "current_company": "Salesforce",
+      "current_title": "Senior Member of Technical Staff",
+      "location": "Remote (Chicago, IL)",
+      "links": { "resume": "https://example.com/resume/tom-becker.pdf", "linkedin": "https://linkedin.com/in/tombecker" },
+      "career_history": [
+        { "company": "Salesforce", "title": "Senior MTS", "start": "2014-05", "end": null }
+      ],
+      "strengths": ["Very experienced", "Deep Java/backend"],
+      "concerns": ["12 years at one large company — no early-stage signal", "Likely set in big-company process", "No recent TypeScript/front-end work"],
+      "comp_expectation": { "base": 195000, "notes": "" },
+      "availability": "4 weeks notice",
+      "work_authorization": "US Citizen",
+      "stage": "rejected",
+      "recruiter_memo": null,
+      "rejection": { "reason": "Startup experience", "notes": "Strong engineer but we're worried a 12-year enterprise background won't adapt to our pace. Would reconsider for a more senior IC role later.", "rejected_by": "Marcus Bell", "rejected_at": "2026-06-22" },
+      "feedback_history": [
+        { "author_type": "client", "author": "Marcus Bell", "text": "Hard pass — exactly the big-company profile we keep saying doesn't work for us. No recent front-end either.", "at": "2026-06-22" }
+      ],
+      "events": [
+        { "type": "imported", "at": "2026-06-19", "actor": "Recruiter" },
+        { "type": "recruiter_reviewed", "at": "2026-06-19", "actor": "Recruiter" },
+        { "type": "submitted_to_client", "at": "2026-06-20", "actor": "Recruiter" },
+        { "type": "client_opened_profile", "at": "2026-06-21", "actor": "Marcus Bell" },
+        { "type": "rejected", "at": "2026-06-22", "actor": "Marcus Bell", "reason": "Startup experience" }
+      ],
+      "open_questions": [],
+      "added_at": "2026-06-19"
+    },
+    {
+      "id": "cand_007",
+      "role_id": "role_fullstack",
+      "name": "Lena Voss",
+      "headline": "Engineering Lead at Vercel",
+      "current_company": "Vercel",
+      "current_title": "Engineering Lead",
+      "location": "San Francisco, CA",
+      "links": { "resume": "https://example.com/resume/lena-voss.pdf", "linkedin": "https://linkedin.com/in/lenavoss" },
+      "career_history": [
+        { "company": "Vercel", "title": "Engineering Lead", "start": "2021-08", "end": null },
+        { "company": "Figma", "title": "Senior Engineer", "start": "2018-03", "end": "2021-07" },
+        { "company": "Early-stage startup (failed)", "title": "Full-Stack Engineer", "start": "2016-01", "end": "2018-02" }
+      ],
+      "strengths": ["Perfect domain + stage fit", "Has seen both a failed startup and a hypergrowth one", "Strong TypeScript + infra"],
+      "concerns": ["Currently a lead — confirm she's happy to be hands-on IC again", "In high demand, likely multiple offers"],
+      "comp_expectation": { "base": 215000, "notes": "At top of band; cares most about equity + mission" },
+      "availability": "3 months (current project commitment)",
+      "work_authorization": "US Citizen",
+      "stage": "interviewing",
+      "recruiter_memo": {
+        "why_we_like": [
+          "Near-perfect domain + stage fit — failed startup AND a hypergrowth one.",
+          "Strong TypeScript + infra; local to SF."
+        ],
+        "concerns": [
+          "Resume reads management-track (Eng Lead) but she told me she wants to go back to pure IC — worth confirming directly.",
+          "Likely has competing offers; 3-month availability is a real timing risk vs the August target."
+        ],
+        "recommendation": "Advance fast and interview now; just go in clear-eyed on timing.",
+        "written_by": "Recruiter",
+        "written_at": "2026-06-14"
+      },
+      "feedback_history": [
+        { "author_type": "client", "author": "Marcus Bell", "text": "Love her. My only worry is the 3-month start — can we make that work?", "at": "2026-06-18" },
+        { "author_type": "recruiter", "author": "Recruiter", "text": "Pushing to see if she can start sooner. Scheduling the HM loop this week.", "at": "2026-06-19" }
+      ],
+      "events": [
+        { "type": "imported", "at": "2026-06-14", "actor": "Recruiter" },
+        { "type": "recruiter_reviewed", "at": "2026-06-14", "actor": "Recruiter" },
+        { "type": "submitted_to_client", "at": "2026-06-15", "actor": "Recruiter" },
+        { "type": "client_opened_profile", "at": "2026-06-16", "actor": "Marcus Bell" },
+        { "type": "client_commented", "at": "2026-06-18", "actor": "Marcus Bell" },
+        { "type": "moved_stage", "at": "2026-06-20", "actor": "Marcus Bell", "from": "shortlisted", "to": "interviewing" },
+        { "type": "interview_scheduled", "at": "2026-07-02", "actor": "Recruiter" }
+      ],
+      "open_questions": [
+        "Is she actually willing to drop from Lead back to IC? (Resume says lead; she says IC.)",
+        "Can the 3-month start be shortened to hit the August target?",
+        "How many competing offers, and what's the timeline pressure?"
+      ],
+      "added_at": "2026-06-14"
+    },
+    {
+      "id": "cand_008",
+      "role_id": "role_designer",
+      "name": "Hana Kim",
+      "headline": "Founding Designer at Mintlify",
+      "current_company": "Mintlify",
+      "current_title": "Founding Product Designer",
+      "location": "San Francisco, CA",
+      "links": { "resume": "https://example.com/resume/hana-kim.pdf", "linkedin": "https://linkedin.com/in/hanakim", "portfolio": "https://hanakim.design" },
+      "career_history": [
+        { "company": "Mintlify", "title": "Founding Product Designer", "start": "2022-01", "end": null },
+        { "company": "Webflow", "title": "Product Designer", "start": "2019-05", "end": "2021-12" }
+      ],
+      "strengths": ["Exactly the founding-designer profile we want", "Dev-tools audience experience at both companies", "Codes a bit in React"],
+      "concerns": ["Only one prior 'founding' role", "Portfolio is strong but mostly marketing-site work, less core product"],
+      "comp_expectation": { "base": 185000, "notes": "" },
+      "availability": "4 weeks notice",
+      "work_authorization": "US Citizen",
+      "stage": "shortlisted",
+      "recruiter_memo": {
+        "why_we_like": [
+          "Exactly the founding-designer profile — has been the first designer before.",
+          "Dev-tools audience experience at both Mintlify and Webflow; codes a little in React."
+        ],
+        "concerns": [
+          "Portfolio skews marketing-site over core product — confirm depth on real product work.",
+          "Only one prior founding role."
+        ],
+        "recommendation": "Advance to portfolio review with Priya.",
+        "written_by": "Recruiter",
+        "written_at": "2026-06-21"
+      },
+      "feedback_history": [
+        { "author_type": "client", "author": "Priya Anand", "text": "Promising. I want to dig into how much of the Mintlify product she actually drove vs the marketing site.", "at": "2026-06-23" }
+      ],
+      "events": [
+        { "type": "imported", "at": "2026-06-21", "actor": "Recruiter" },
+        { "type": "recruiter_reviewed", "at": "2026-06-21", "actor": "Recruiter" },
+        { "type": "submitted_to_client", "at": "2026-06-21", "actor": "Recruiter" },
+        { "type": "client_opened_profile", "at": "2026-06-23", "actor": "Priya Anand" },
+        { "type": "client_commented", "at": "2026-06-23", "actor": "Priya Anand" },
+        { "type": "moved_stage", "at": "2026-06-24", "actor": "Priya Anand", "from": "reviewing", "to": "shortlisted" }
+      ],
+      "open_questions": [
+        "How much of Mintlify's core product did she own vs the marketing site?",
+        "Comfort level shipping without any other designers?"
+      ],
+      "added_at": "2026-06-21"
+    },
+    {
+      "id": "cand_009",
+      "role_id": "role_designer",
+      "name": "Robert Nguyen",
+      "headline": "Senior Designer at a design agency",
+      "current_company": "Pentagram",
+      "current_title": "Senior Designer",
+      "location": "New York, NY",
+      "links": { "resume": "https://example.com/resume/robert-nguyen.pdf", "linkedin": "https://linkedin.com/in/robertnguyen", "portfolio": "https://robertnguyen.co" },
+      "career_history": [
+        { "company": "Pentagram", "title": "Senior Designer", "start": "2018-09", "end": null }
+      ],
+      "strengths": ["Beautiful visual craft", "Very polished portfolio"],
+      "concerns": ["Agency-only — never owned a live product", "NYC-based, role is SF in-office", "Unclear product-thinking ability"],
+      "comp_expectation": { "base": 175000, "notes": "" },
+      "availability": "Immediate",
+      "work_authorization": "US Citizen",
+      "stage": "new",
+      "recruiter_memo": null,
+      "feedback_history": [],
+      "events": [
+        { "type": "imported", "at": "2026-06-27", "actor": "Recruiter" },
+        { "type": "recruiter_reviewed", "at": "2026-06-27", "actor": "Recruiter" }
+      ],
+      "open_questions": [
+        "Agency background — has he ever owned a shipped product, or only client deliverables?",
+        "Would he relocate to SF? Role is in-office.",
+        "Product thinking is unverified — needs a portfolio probe."
+      ],
+      "added_at": "2026-06-27"
+    },
+    {
+      "id": "cand_010",
+      "role_id": "role_designer",
+      "name": "Priscilla Adeyemi",
+      "headline": "Product Designer at Linear",
+      "current_company": "Linear",
+      "current_title": "Product Designer",
+      "location": "Remote (Lisbon, Portugal)",
+      "links": { "resume": "https://example.com/resume/priscilla-adeyemi.pdf", "linkedin": "https://linkedin.com/in/priscillaadeyemi", "portfolio": "https://priscilla.design" },
+      "career_history": [
+        { "company": "Linear", "title": "Product Designer", "start": "2021-04", "end": null },
+        { "company": "N26", "title": "Product Designer", "start": "2018-06", "end": "2021-03" }
+      ],
+      "strengths": ["Best-in-class product taste (Linear)", "Strong systems thinking", "Loves developer tools"],
+      "concerns": ["Based in Portugal — role wants SF in-office", "Has never been a solo/founding designer", "Time-zone overlap limited"],
+      "comp_expectation": { "base": 170000, "notes": "Open, but relocation is a hard no" },
+      "availability": "6 weeks notice",
+      "work_authorization": "Not authorized to work in US (would need relocation + visa)",
+      "stage": "new",
+      "recruiter_memo": null,
+      "feedback_history": [],
+      "events": [
+        { "type": "imported", "at": "2026-06-27", "actor": "Recruiter" },
+        { "type": "recruiter_reviewed", "at": "2026-06-27", "actor": "Recruiter" },
+        { "type": "recruiter_flagged", "at": "2026-06-27", "actor": "Recruiter", "detail": "location + work auth conflict with in-office role" }
+      ],
+      "open_questions": [
+        "Role wants SF in-office; she says relocation is a hard no. Is there any version of this that works?",
+        "She's never been a solo/founding designer — can she handle being the only one?"
+      ],
+      "added_at": "2026-06-27"
+    }
+  ]
+}
