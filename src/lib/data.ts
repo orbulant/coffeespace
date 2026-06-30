@@ -12,6 +12,7 @@ import {
   aiBriefs,
   aiDigests,
 } from "@/db/schema";
+import type { FactualityScore } from "@/db/schema";
 import { CLIENT_ID } from "./config";
 import { computeFlags, detectConflicts, type Flag } from "./rules";
 import { computeMomentum, type Momentum } from "./momentum";
@@ -140,6 +141,58 @@ export async function getRoleCandidates(roleId: string): Promise<EnrichedCandida
       flags: computeFlags(c, role, e, s),
       momentum: computeMomentum(c, e),
       lastEventAt: lastEventAt(e),
+    };
+  });
+}
+
+/** The latest saved brief's headline numbers, for the role-page confidence view. */
+export type RoleCandidateBrief = {
+  confidenceScore: number;
+  rationale: string;
+  factuality: FactualityScore | null;
+  createdAt: string;
+};
+
+export type RoleCandidateWithBrief = EnrichedCandidate & {
+  brief: RoleCandidateBrief | null;
+};
+
+/**
+ * Role candidates enriched with their most recent saved AI brief (or null if none
+ * exists yet). Drives the role page, where briefs are generated on visit and their
+ * confidence scores are shown inline.
+ */
+export async function getRoleCandidatesWithBriefs(
+  roleId: string,
+): Promise<RoleCandidateWithBrief[]> {
+  const cands = await getRoleCandidates(roleId);
+  if (!cands.length) return [];
+
+  const ids = cands.map((c) => c.id);
+  const briefs = await db
+    .select()
+    .from(aiBriefs)
+    .where(inArray(aiBriefs.candidateId, ids))
+    .orderBy(desc(aiBriefs.createdAt));
+
+  // Newest-first ordering means the first row we see per candidate is the latest.
+  const latestByCandidate = new Map<string, Brief>();
+  for (const b of briefs) {
+    if (!latestByCandidate.has(b.candidateId)) latestByCandidate.set(b.candidateId, b);
+  }
+
+  return cands.map((c) => {
+    const b = latestByCandidate.get(c.id);
+    return {
+      ...c,
+      brief: b
+        ? {
+            confidenceScore: b.content.confidence_score,
+            rationale: b.content.confidence_rationale,
+            factuality: b.factuality,
+            createdAt: b.createdAt.toISOString(),
+          }
+        : null,
     };
   });
 }

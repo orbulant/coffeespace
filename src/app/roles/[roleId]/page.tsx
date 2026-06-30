@@ -1,17 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getRole, getRoleCandidates, type EnrichedCandidate } from "@/lib/data";
-import {
-  Card,
-  FlagList,
-  StageBadge,
-  StageProgress,
-  MomentumMeter,
-  SectionTitle,
-  Tag,
-} from "@/components/ui";
-import { formatBand, formatComp, STAGE_ORDER } from "@/lib/format";
-import type { Stage } from "@/db/schema";
+import { getRole, getRoleCandidatesWithBriefs } from "@/lib/data";
+import { Card } from "@/components/ui";
+import { RoleBriefs } from "@/components/RoleBriefs";
+import { formatBand, STAGE_ORDER } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +16,7 @@ export default async function RolePage({
   const role = await getRole(roleId);
   if (!role) notFound();
 
-  const candidates = await getRoleCandidates(roleId);
+  const candidates = await getRoleCandidatesWithBriefs(roleId);
   const calibration = candidates.filter((c) => c.calibration);
 
   // Single ordered list, sorted along the pipeline (new → … → hired → rejected).
@@ -61,14 +53,7 @@ export default async function RolePage({
         </Card>
       )}
 
-      <section>
-        <SectionTitle>Candidates · {candidates.length}</SectionTitle>
-        <div className="space-y-3">
-          {sorted.map((c) => (
-            <CandidateRow key={c.id} candidate={c} />
-          ))}
-        </div>
-      </section>
+      <RoleBriefs candidates={sorted} />
     </div>
   );
 }
@@ -107,34 +92,3 @@ function SpecList({
   );
 }
 
-function CandidateRow({ candidate: c }: { candidate: EnrichedCandidate }) {
-  return (
-    <Link href={`/candidates/${c.id}`} className="block">
-      <Card className="p-4 transition-colors hover:border-slate-300 hover:bg-slate-50">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-slate-900">{c.name}</span>
-              {c.calibration && <Tag tone="indigo">calibration</Tag>}
-            </div>
-            <p className="truncate text-xs text-slate-500">{c.headline}</p>
-            <p className="mt-0.5 text-xs text-slate-500">
-              Comp {formatComp(c.compExpectation)} · {c.availability ?? "availability n/a"}
-            </p>
-          </div>
-          <StageBadge stage={c.stage} />
-        </div>
-        {c.flags.length > 0 && (
-          <div className="mt-2">
-            <FlagList flags={c.flags} />
-          </div>
-        )}
-        <div className="mt-2 flex items-center gap-2">
-          <span className="text-[11px] uppercase tracking-wide text-slate-400">Momentum</span>
-          <MomentumMeter momentum={c.momentum} />
-        </div>
-        <StageProgress stage={c.stage} />
-      </Card>
-    </Link>
-  );
-}
