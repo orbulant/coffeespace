@@ -53,6 +53,7 @@ export function computeFlags(
   candidate: Candidate,
   role: Role,
   events: Event[] = [],
+  sources: { kind: string; recordedAt: string | null }[] = [],
 ): Flag[] {
   const flags: Flag[] = [];
 
@@ -171,7 +172,82 @@ export function computeFlags(
     }
   }
 
+  // Conflicting information — surfaced as a single flag here; the detailed,
+  // value-by-value breakdown is produced by detectConflicts() for the detail page.
+  const cf = conflictFlag(detectConflicts(candidate, role, sources));
+  if (cf) flags.push(cf);
+
   return flags.sort((a, b) => SEVERITY_RANK[a.severity] - SEVERITY_RANK[b.severity]);
+}
+
+/**
+ * Conflict detection: where information about a candidate disagrees, point it out
+ * with BOTH values rather than silently trusting one. Deterministic and honest —
+ * it flags the kinds of disagreement we can verify without guessing. The AI brief
+ * goes further and reconciles values buried in free-text source artifacts.
+ */
+export type CandidateConflict = {
+  field: string;
+  values: { label: string; value: string }[];
+  note: string;
+};
+
+const LEAD_TITLE = /\b(lead|manager|director|head of|vp|vice president|chief)\b/i;
+const IC_ROLE = /\b(engineer|designer|developer)\b/i;
+
+export function detectConflicts(
+  candidate: Candidate,
+  role: Role,
+  sources: { kind: string; recordedAt: string | null }[] = [],
+): CandidateConflict[] {
+  const conflicts: CandidateConflict[] = [];
+
+  // A) The structured record may be stale relative to a newer source artifact.
+  const record = candidate.addedAt;
+  const newer = sources
+    .filter((s) => s.recordedAt && record && s.recordedAt > record)
+    .sort((a, b) => (a.recordedAt! < b.recordedAt! ? 1 : -1));
+  if (newer.length) {
+    const latest = newer[0];
+    conflicts.push({
+      field: "Record may be out of date",
+      values: [
+        { label: "Structured record", value: `captured ${record}` },
+        { label: `Newest source — ${latest.kind}`, value: `${latest.recordedAt} (newer)` },
+      ],
+      note: "A source artifact postdates the structured record, so the comp / location / availability shown may be stale. The latest source is treated as the source of truth — verify the fields against it (the AI brief lists each value and reconciles them).",
+    });
+  }
+
+  // B) Management/lead track vs an individual-contributor role.
+  if (
+    candidate.currentTitle &&
+    LEAD_TITLE.test(candidate.currentTitle) &&
+    role.title &&
+    IC_ROLE.test(role.title) &&
+    !LEAD_TITLE.test(role.title)
+  ) {
+    conflicts.push({
+      field: "Seniority track",
+      values: [
+        { label: "Current title", value: candidate.currentTitle },
+        { label: "This role", value: `${role.title} (individual contributor)` },
+      ],
+      note: "Currently on a lead/management track, but this is an IC seat. Confirm they want to go hands-on rather than assuming either way.",
+    });
+  }
+
+  return conflicts;
+}
+
+export function conflictFlag(conflicts: CandidateConflict[]): Flag | null {
+  if (!conflicts.length) return null;
+  return {
+    type: "conflict",
+    severity: "warning",
+    label: "Conflicting info",
+    detail: `${conflicts.map((c) => c.field.toLowerCase()).join("; ")} — surfaced, not resolved.`,
+  };
 }
 
 export function topSeverity(flags: Flag[]): FlagSeverity | null {

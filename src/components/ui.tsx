@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Flag, FlagSeverity } from "@/lib/rules";
-import type { Stage } from "@/db/schema";
+import type { Momentum } from "@/lib/momentum";
+import type { Stage, FactualityScore } from "@/db/schema";
 import { stageLabel } from "@/lib/format";
 
 export function cn(...parts: (string | false | null | undefined)[]): string {
@@ -131,6 +132,122 @@ export function StageProgress({ stage }: { stage: Stage }) {
         ))}
       </div>
     </div>
+  );
+}
+
+const TRAJECTORY: Record<Momentum["trajectory"], [glyph: string, cls: string]> = {
+  accelerating: ["↑", "text-emerald-600"],
+  steady: ["→", "text-slate-400"],
+  slowing: ["↓", "text-amber-600"],
+  closed: ["×", "text-rose-500"],
+};
+
+function momentumColor(score: number, closed: boolean): string {
+  if (closed) return "bg-slate-300";
+  if (score >= 70) return "bg-emerald-500";
+  if (score >= 45) return "bg-indigo-500";
+  if (score >= 25) return "bg-amber-500";
+  return "bg-slate-400";
+}
+
+export function MomentumMeter({
+  momentum,
+  size = "sm",
+}: {
+  momentum: Momentum;
+  size?: "sm" | "lg";
+}) {
+  const closed = momentum.trajectory === "closed";
+  const color = momentumColor(momentum.score, closed);
+  const [glyph, glyphCls] = TRAJECTORY[momentum.trajectory];
+
+  if (size === "lg") {
+    return (
+      <div>
+        <div className="flex items-baseline gap-2">
+          <span className="text-3xl font-semibold text-slate-900">
+            {closed ? "—" : momentum.score}
+          </span>
+          <span className="text-sm text-slate-500">
+            {closed ? "Closed" : `/ 100 · ${momentum.label}`}
+          </span>
+          <span className={cn("ml-auto text-sm capitalize", glyphCls)}>
+            {glyph} {momentum.trajectory}
+          </span>
+        </div>
+        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-100">
+          <div
+            className={cn("h-full rounded-full", color)}
+            style={{ width: `${closed ? 100 : momentum.score}%` }}
+          />
+        </div>
+        <p className="mt-2 text-xs text-slate-500">
+          Higher momentum = more likely to reach a successful hire — from stage progression,
+          how recently they moved, and client engagement.
+        </p>
+        {momentum.factors.length > 0 && (
+          <ul className="mt-3 space-y-1">
+            {momentum.factors.map((f, i) => (
+              <li key={i} className="flex items-center justify-between text-xs">
+                <span className="text-slate-600">{f.label}</span>
+                <span
+                  className={cn(
+                    "font-medium tabular-nums",
+                    f.delta > 0
+                      ? "text-emerald-600"
+                      : f.delta < 0
+                        ? "text-rose-600"
+                        : "text-slate-400",
+                  )}
+                >
+                  {f.delta > 0 ? `+${f.delta}` : f.delta === 0 ? "—" : f.delta}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <span className="h-1.5 w-16 overflow-hidden rounded-full bg-slate-100">
+        <span
+          className={cn("block h-full rounded-full", color)}
+          style={{ width: `${closed ? 100 : momentum.score}%` }}
+        />
+      </span>
+      <span className="text-xs font-medium text-slate-600">
+        {closed ? "Closed" : `${momentum.score} ${momentum.label}`}
+      </span>
+      <span className={cn("text-xs", glyphCls)} title={momentum.trajectory}>
+        {glyph}
+      </span>
+    </span>
+  );
+}
+
+// openevals factual-groundedness score (0–1) shown as a trust chip; hover for rationale.
+export function FactualityBadge({ factuality }: { factuality?: FactualityScore | null }) {
+  if (!factuality) return null;
+  const pct = Math.round(factuality.score * 100);
+  const cls =
+    pct >= 80
+      ? "bg-emerald-100 text-emerald-700"
+      : pct >= 50
+        ? "bg-amber-100 text-amber-800"
+        : "bg-rose-100 text-rose-700";
+  return (
+    <span
+      title={factuality.comment ?? undefined}
+      className={cn(
+        "inline-flex shrink-0 items-center rounded px-2 py-0.5 text-xs font-medium",
+        cls,
+      )}
+    >
+      Factuality {pct}%
+    </span>
   );
 }
 

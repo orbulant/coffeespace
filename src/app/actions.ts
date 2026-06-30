@@ -3,11 +3,20 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
-import { candidates, candidateEvents, aiBriefs } from "@/db/schema";
+import { candidates, candidateEvents, aiBriefs, aiDigests } from "@/db/schema";
 import type { Stage } from "@/db/schema";
-import { getCandidateFull, getClient, getOverview } from "@/lib/data";
+import { CLIENT_ID } from "@/lib/config";
+import {
+  getCandidateFull,
+  getClient,
+  getOverview,
+  getRecentDigests,
+  getRecentBriefs,
+} from "@/lib/data";
 import { synthesizeBrief, type BriefResult } from "@/lib/ai/brief";
 import { synthesizeDigest, type DigestResult } from "@/lib/ai/digest";
+import { synthesizeRetrospect, type RetrospectResult } from "@/lib/ai/retrospect";
+import { scoreFactuality } from "@/lib/ai/factuality";
 
 const ACTOR = "Client (you)";
 const today = () => new Date().toISOString().slice(0, 10);
@@ -32,7 +41,10 @@ async function setStage(candidateId: string, to: Stage) {
     .from(candidates)
     .where(eq(candidates.id, candidateId));
   const from = rows[0]?.stage;
-  await db.update(candidates).set({ stage: to }).where(eq(candidates.id, candidateId));
+  await db
+    .update(candidates)
+    .set({ stage: to })
+    .where(eq(candidates.id, candidateId));
   await recordEvent(candidateId, "moved_stage", { from, to });
 }
 
@@ -57,7 +69,11 @@ const REJECT_REASONS = [
   "Other",
 ] as const;
 
-export async function rejectCandidate(id: string, reason: string, notes: string) {
+export async function rejectCandidate(
+  id: string,
+  reason: string,
+  notes: string,
+) {
   const safeReason = (REJECT_REASONS as readonly string[]).includes(reason)
     ? reason
     : "Other";
@@ -102,21 +118,37 @@ export async function generateBrief(id: string): Promise<BriefResult> {
     clientPreferences: client?.preferences ?? null,
   });
 
-  if (result.ok) {
-    await db.insert(aiBriefs).values({
-      candidateId: id,
-      model: result.model,
-      content: result.object,
-    });
-    revalidatePath(`/candidates/${id}`);
-  }
-  return result;
+  if (!result.ok) return result;
+
+  // Score factual groundedness against the source material the brief was built from.
+  const context = JSON.stringify({
+    candidate: full.candidate,
+    role: full.role,
+    sources: full.sources.map((s) => ({
+      kind: s.kind,
+      recordedAt: s.recordedAt,
+      content: s.content,
+    })),
+    feedback: full.feedback,
+    clientPreferences: client?.preferences ?? null,
+  });
+  const factuality = await scoreFactuality(result.object, context);
+
+  await db.insert(aiBriefs).values({
+    candidateId: id,
+    model: result.model,
+    content: result.object,
+    factuality,
+  });
+  revalidatePath(`/candidates/${id}`);
+  return { ...result, factuality };
 }
 
-/** Generate (not persisted) the pipeline attention digest. */
+/** Generate + persist the pipeline attention digest. Latest is shown on load. */
 export async function generatePipelineDigest(): Promise<DigestResult> {
   const { client, candidates: cands, recentEvents } = await getOverview();
-  return synthesizeDigest({
+
+  const digestInput = {
     clientCompany: client?.companyName ?? "the client",
     clientPreferences: client?.preferences ?? null,
     candidates: cands
@@ -133,5 +165,42 @@ export async function generatePipelineDigest(): Promise<DigestResult> {
       at: e.at,
       candidateName: e.candidateName,
     })),
+  };
+
+  const result = await synthesizeDigest(digestInput);
+  if (!result.ok) return result;
+
+  const factuality = await scoreFactuality(result.object, JSON.stringify(digestInput));
+  await db.insert(aiDigests).values({
+    clientId: client?.id ?? CLIENT_ID,
+    model: result.model,
+    content: result.object,
+    factuality,
   });
+  revalidatePath("/");
+  return { ...result, factuality };
+}
+
+/** Retrospect over the last few saved pipeline digests — what changed over time. */
+export async function generateDigestRetrospect(): Promise<RetrospectResult> {
+  const digests = await getRecentDigests(5);
+  const snapshots = [...digests]
+    .reverse()
+    .map((d) => ({ at: d.createdAt.toISOString(), content: d.content }));
+  const result = await synthesizeRetrospect("digest", snapshots);
+  if (!result.ok) return result;
+  const factuality = await scoreFactuality(result.object, JSON.stringify(snapshots));
+  return { ...result, factuality };
+}
+
+/** Retrospect over the last few saved briefs for one candidate — what changed over time. */
+export async function generateBriefRetrospect(candidateId: string): Promise<RetrospectResult> {
+  const briefs = await getRecentBriefs(candidateId, 5);
+  const snapshots = [...briefs]
+    .reverse()
+    .map((b) => ({ at: b.createdAt.toISOString(), content: b.content }));
+  const result = await synthesizeRetrospect("brief", snapshots);
+  if (!result.ok) return result;
+  const factuality = await scoreFactuality(result.object, JSON.stringify(snapshots));
+  return { ...result, factuality };
 }

@@ -1,26 +1,30 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { generateBrief } from "@/app/actions";
-import type { CandidateBrief } from "@/db/schema";
-import { cn } from "./ui";
+import type { CandidateBrief, FactualityScore } from "@/db/schema";
+import { cn, FactualityBadge } from "./ui";
 
 export function BriefPanel({
   candidateId,
   initialBrief,
   initialModel,
   initialCreatedAt,
+  initialFactuality,
 }: {
   candidateId: string;
   initialBrief: CandidateBrief | null;
   initialModel?: string;
   initialCreatedAt?: string;
+  initialFactuality?: FactualityScore | null;
 }) {
   const [brief, setBrief] = useState<CandidateBrief | null>(initialBrief);
   const [model, setModel] = useState<string | undefined>(initialModel);
   const [createdAt, setCreatedAt] = useState<string | undefined>(initialCreatedAt);
+  const [factuality, setFactuality] = useState<FactualityScore | null>(initialFactuality ?? null);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const autoFired = useRef(false);
 
   const generate = () =>
     startTransition(async () => {
@@ -30,10 +34,20 @@ export function BriefPanel({
         setBrief(r.object);
         setModel(r.model);
         setCreatedAt(new Date().toISOString());
+        setFactuality(r.factuality ?? null);
       } else {
         setError(r.error);
       }
     });
+
+  // On first load: show the saved brief if one exists; otherwise generate one.
+  useEffect(() => {
+    if (!initialBrief && !autoFired.current) {
+      autoFired.current = true;
+      generate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
@@ -58,9 +72,9 @@ export function BriefPanel({
 
       {!brief && !error && (
         <div className="rounded-xl border border-dashed border-slate-300 bg-white p-5 text-sm text-slate-600">
-          Synthesizes a client-facing brief from the structured record <em>and</em> the source
-          artifacts — resolving conflicts with a freshest-source-wins rule, framing fit against{" "}
-          Tidalwave&apos;s hiring philosophy, and surfacing open questions instead of guessing.
+          {pending
+            ? "Synthesizing the brief — reconciling the source artifacts and framing fit against Tidalwave's hiring philosophy…"
+            : "Synthesizes a client-facing brief from the structured record and the source artifacts — resolving conflicts with a freshest-source-wins rule, framing fit against Tidalwave's hiring philosophy, and surfacing open questions instead of guessing."}
         </div>
       )}
 
@@ -69,6 +83,7 @@ export function BriefPanel({
           <div className="flex items-center gap-2 rounded-md bg-indigo-50 px-3 py-1.5 text-xs text-indigo-700">
             <span className="font-semibold">AI-generated draft</span>
             <span>· review before sharing with the client</span>
+            <FactualityBadge factuality={factuality} />
             {model && <span className="ml-auto font-mono text-[11px] text-indigo-400">{model}</span>}
           </div>
 

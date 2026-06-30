@@ -21,6 +21,7 @@ import {
   feedbackHistory,
   candidateSources,
   aiBriefs,
+  aiDigests,
 } from "../db/schema";
 
 const dataDir = path.join(process.cwd(), "data");
@@ -35,6 +36,7 @@ async function main() {
   const seed = JSON.parse(readFileSync(path.join(dataDir, "seed.json"), "utf8"));
 
   // Wipe (FK-safe order) so re-seeding is clean.
+  await db.delete(aiDigests);
   await db.delete(aiBriefs);
   await db.delete(candidateSources);
   await db.delete(feedbackHistory);

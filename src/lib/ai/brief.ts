@@ -9,7 +9,7 @@ import type {
   Source,
   Feedback,
 } from "@/lib/data";
-import type { ClientPreferences } from "@/db/schema";
+import type { ClientPreferences, FactualityScore } from "@/db/schema";
 
 export type BriefInput = {
   candidate: Candidate;
@@ -84,7 +84,7 @@ Produce the brief now.`;
 }
 
 export type BriefResult =
-  | { ok: true; object: BriefObject; model: string }
+  | { ok: true; object: BriefObject; model: string; factuality?: FactualityScore | null }
   | { ok: false; error: string };
 
 export async function synthesizeBrief(input: BriefInput): Promise<BriefResult> {

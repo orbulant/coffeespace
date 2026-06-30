@@ -1,5 +1,5 @@
 import "server-only";
-import { eq, inArray, asc } from "drizzle-orm";
+import { eq, inArray, asc, desc } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
 import { db } from "@/db";
 import {
@@ -10,9 +10,11 @@ import {
   feedbackHistory,
   candidateSources,
   aiBriefs,
+  aiDigests,
 } from "@/db/schema";
 import { CLIENT_ID } from "./config";
-import { computeFlags, type Flag } from "./rules";
+import { computeFlags, detectConflicts, type Flag } from "./rules";
+import { computeMomentum, type Momentum } from "./momentum";
 
 export type Client = InferSelectModel<typeof clients>;
 export type Role = InferSelectModel<typeof roles>;
@@ -21,10 +23,12 @@ export type CandidateEvent = InferSelectModel<typeof candidateEvents>;
 export type Feedback = InferSelectModel<typeof feedbackHistory>;
 export type Source = InferSelectModel<typeof candidateSources>;
 export type Brief = InferSelectModel<typeof aiBriefs>;
+export type Digest = InferSelectModel<typeof aiDigests>;
 
 export type EnrichedCandidate = Candidate & {
   role: Role;
   flags: Flag[];
+  momentum: Momentum;
   lastEventAt: string | null;
 };
 
@@ -43,25 +47,60 @@ export async function getRole(roleId: string): Promise<Role | undefined> {
   return rows[0];
 }
 
+/** Most recently generated pipeline digest (shown on load; null if none yet). */
+export async function getLatestDigest(): Promise<Digest | undefined> {
+  const rows = await db
+    .select()
+    .from(aiDigests)
+    .where(eq(aiDigests.clientId, CLIENT_ID))
+    .orderBy(desc(aiDigests.createdAt))
+    .limit(1);
+  return rows[0];
+}
+
+/** Recent digests, newest first — for the pipeline Retrospect. */
+export async function getRecentDigests(limit = 10): Promise<Digest[]> {
+  return db
+    .select()
+    .from(aiDigests)
+    .where(eq(aiDigests.clientId, CLIENT_ID))
+    .orderBy(desc(aiDigests.createdAt))
+    .limit(limit);
+}
+
+/** Recent briefs for one candidate, newest first — for the candidate Retrospect. */
+export async function getRecentBriefs(candidateId: string, limit = 10): Promise<Brief[]> {
+  return db
+    .select()
+    .from(aiBriefs)
+    .where(eq(aiBriefs.candidateId, candidateId))
+    .orderBy(desc(aiBriefs.createdAt))
+    .limit(limit);
+}
+
 /** Overview: client, roles, every candidate enriched with rule flags, and a recent-activity feed. */
 export async function getOverview() {
-  const [client, allRoles, allCandidates, allEvents] = await Promise.all([
+  const [client, allRoles, allCandidates, allEvents, allSources] = await Promise.all([
     getClient(),
     db.select().from(roles).where(eq(roles.clientId, CLIENT_ID)),
     db.select().from(candidates),
     db.select().from(candidateEvents),
+    db.select().from(candidateSources),
   ]);
 
   const roleById = new Map(allRoles.map((r) => [r.id, r]));
   const eventsByCandidate = groupBy(allEvents, (e) => e.candidateId);
+  const sourcesByCandidate = groupBy(allSources, (s) => s.candidateId);
 
   const enriched: EnrichedCandidate[] = allCandidates.map((c) => {
     const role = roleById.get(c.roleId)!;
     const evs = eventsByCandidate.get(c.id) ?? [];
+    const srcs = sourcesByCandidate.get(c.id) ?? [];
     return {
       ...c,
       role,
-      flags: computeFlags(c, role, evs),
+      flags: computeFlags(c, role, evs, srcs),
+      momentum: computeMomentum(c, evs),
       lastEventAt: lastEventAt(evs),
     };
   });
@@ -86,14 +125,22 @@ export async function getRoleCandidates(roleId: string): Promise<EnrichedCandida
   const cands = await db.select().from(candidates).where(eq(candidates.roleId, roleId));
   if (!cands.length) return [];
   const ids = cands.map((c) => c.id);
-  const evs = await db
-    .select()
-    .from(candidateEvents)
-    .where(inArray(candidateEvents.candidateId, ids));
+  const [evs, srcs] = await Promise.all([
+    db.select().from(candidateEvents).where(inArray(candidateEvents.candidateId, ids)),
+    db.select().from(candidateSources).where(inArray(candidateSources.candidateId, ids)),
+  ]);
   const eventsByCandidate = groupBy(evs, (e) => e.candidateId);
+  const sourcesByCandidate = groupBy(srcs, (s) => s.candidateId);
   return cands.map((c) => {
     const e = eventsByCandidate.get(c.id) ?? [];
-    return { ...c, role, flags: computeFlags(c, role, e), lastEventAt: lastEventAt(e) };
+    const s = sourcesByCandidate.get(c.id) ?? [];
+    return {
+      ...c,
+      role,
+      flags: computeFlags(c, role, e, s),
+      momentum: computeMomentum(c, e),
+      lastEventAt: lastEventAt(e),
+    };
   });
 }
 
@@ -137,8 +184,11 @@ export async function getCandidateFull(id: string) {
     events,
     feedback,
     sources: sortedSources,
-    flags: computeFlags(candidate, role!, events),
+    flags: computeFlags(candidate, role!, events, sortedSources),
+    conflicts: detectConflicts(candidate, role!, sortedSources),
+    momentum: computeMomentum(candidate, events),
     latestBrief,
+    briefCount: briefs.length,
   };
 }
 

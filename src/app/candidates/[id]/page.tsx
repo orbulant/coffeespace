@@ -1,9 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCandidateFull } from "@/lib/data";
-import { Card, FlagList, StageBadge, SectionTitle, Tag, Field } from "@/components/ui";
+import {
+  Card,
+  FlagList,
+  StageBadge,
+  MomentumMeter,
+  SectionTitle,
+  Tag,
+  Field,
+} from "@/components/ui";
 import { DecisionBar } from "@/components/DecisionBar";
 import { BriefPanel } from "@/components/BriefPanel";
+import { RetrospectPanel } from "@/components/RetrospectPanel";
 import {
   formatComp,
   formatMoney,
@@ -24,7 +33,18 @@ export default async function CandidatePage({
   const data = await getCandidateFull(id);
   if (!data) notFound();
 
-  const { candidate: c, role, events, feedback, sources, flags, latestBrief } = data;
+  const {
+    candidate: c,
+    role,
+    events,
+    feedback,
+    sources,
+    flags,
+    conflicts,
+    momentum,
+    latestBrief,
+    briefCount,
+  } = data;
 
   const base = c.compExpectation?.base;
   const band = role.compBand;
@@ -96,6 +116,37 @@ export default async function CandidatePage({
               <div key={i} className="text-sm">
                 <FlagList flags={[f]} />
                 <p className="mt-1 text-slate-600">{f.detail}</p>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {/* Conflicting information — pointed out, not resolved */}
+      {conflicts.length > 0 && (
+        <Card className="border-amber-300 bg-amber-50/60 p-4">
+          <div className="flex items-baseline justify-between">
+            <SectionTitle>Conflicting information</SectionTitle>
+            <span className="text-xs font-medium text-amber-700">pointed out, not resolved</span>
+          </div>
+          <div className="space-y-3">
+            {conflicts.map((cf, i) => (
+              <div key={i}>
+                <p className="text-sm font-semibold text-slate-900">{cf.field}</p>
+                <div className="mt-1 grid gap-2 sm:grid-cols-2">
+                  {cf.values.map((v, j) => (
+                    <div
+                      key={j}
+                      className="rounded-md bg-white p-2 ring-1 ring-inset ring-amber-200"
+                    >
+                      <span className="block text-[11px] font-medium uppercase tracking-wide text-slate-400">
+                        {v.label}
+                      </span>
+                      <span className="text-sm text-slate-800">{v.value}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-1 text-xs text-slate-600">{cf.note}</p>
               </div>
             ))}
           </div>
@@ -228,16 +279,24 @@ export default async function CandidatePage({
           )}
         </div>
 
-        {/* Right: activity + AI brief */}
+        {/* Right: momentum + AI brief + activity */}
         <div className="space-y-6">
+          <Card className="p-5">
+            <SectionTitle>Momentum</SectionTitle>
+            <MomentumMeter momentum={momentum} size="lg" />
+          </Card>
+
           <Card className="p-5">
             <BriefPanel
               candidateId={c.id}
               initialBrief={latestBrief?.content ?? null}
               initialModel={latestBrief?.model}
               initialCreatedAt={latestBrief?.createdAt?.toISOString()}
+              initialFactuality={latestBrief?.factuality ?? null}
             />
           </Card>
+
+          <RetrospectPanel kind="brief" candidateId={c.id} historyCount={briefCount} />
 
           {feedback.length > 0 && (
             <Card className="p-5">

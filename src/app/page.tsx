@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { getOverview, type EnrichedCandidate } from "@/lib/data";
+import { getOverview, getRecentDigests, type EnrichedCandidate } from "@/lib/data";
 import { sortBySeverity } from "@/lib/rules";
 import { Card, FlagList, StageBadge, SectionTitle } from "@/components/ui";
 import { AttentionDigest } from "@/components/AttentionDigest";
+import { RetrospectPanel } from "@/components/RetrospectPanel";
 import { eventLabel, formatBand, relativeDays, stageLabel, STAGE_ORDER } from "@/lib/format";
+import { momentumRollup } from "@/lib/momentum";
 import type { Stage } from "@/db/schema";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +16,9 @@ export default async function OverviewPage() {
   if (!client) {
     return <NotSeeded />;
   }
+
+  const recentDigests = await getRecentDigests();
+  const latestDigest = recentDigests[0];
 
   const attention = sortBySeverity(
     candidates.filter(
@@ -36,6 +41,7 @@ export default async function OverviewPage() {
         <div className="grid gap-4 md:grid-cols-2">
           {roles.map((role) => {
             const roleCands = candidates.filter((c) => c.roleId === role.id);
+            const roll = momentumRollup(roleCands);
             return (
               <Card key={role.id} className="p-5">
                 <div className="flex items-start justify-between">
@@ -56,6 +62,20 @@ export default async function OverviewPage() {
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   <StageCounts candidates={roleCands} />
                 </div>
+                <div className="mt-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="uppercase tracking-wide text-slate-400">Search momentum</span>
+                    <span className="font-medium text-slate-700">
+                      {roll.score} · {roll.label}
+                    </span>
+                  </div>
+                  <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                    <div
+                      className="h-full rounded-full bg-indigo-500"
+                      style={{ width: `${roll.score}%` }}
+                    />
+                  </div>
+                </div>
                 <Link
                   href={`/roles/${role.id}`}
                   className="mt-4 inline-block text-sm font-medium text-indigo-600 hover:underline"
@@ -68,9 +88,14 @@ export default async function OverviewPage() {
         </div>
       </section>
 
-      {/* AI pipeline summary (on demand) */}
-      <section>
-        <AttentionDigest />
+      {/* AI pipeline summary (cached; auto-generates on first load) + retrospect */}
+      <section className="space-y-4">
+        <AttentionDigest
+          initialDigest={latestDigest?.content ?? null}
+          initialCreatedAt={latestDigest?.createdAt?.toISOString()}
+          initialFactuality={latestDigest?.factuality ?? null}
+        />
+        <RetrospectPanel kind="digest" historyCount={recentDigests.length} />
       </section>
 
       {/* Rule-based attention list */}

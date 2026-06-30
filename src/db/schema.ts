@@ -127,6 +127,21 @@ export const aiBriefs = pgTable("ai_briefs", {
     .references(() => candidates.id),
   model: text("model").notNull(),
   content: jsonb("content").$type<CandidateBrief>().notNull(),
+  // openevals factual-groundedness score (null if scoring failed/unavailable).
+  factuality: jsonb("factuality").$type<FactualityScore | null>(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// Persisted pipeline digests (client-scoped). The latest is shown on load so the
+// overview is fast; a refresh generates and saves a new one.
+export const aiDigests = pgTable("ai_digests", {
+  id: serial("id").primaryKey(),
+  clientId: text("client_id")
+    .notNull()
+    .references(() => clients.id),
+  model: text("model").notNull(),
+  content: jsonb("content").$type<PipelineDigest>().notNull(),
+  factuality: jsonb("factuality").$type<FactualityScore | null>(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -195,6 +210,25 @@ export type CandidateBrief = {
   confidence_score: number; // 0–100
   confidence_rationale: string;
   recommended_next_action: string;
+};
+
+// The persisted pipeline digest (mirrors the Zod schema in src/lib/ai/digest.ts).
+export type PipelineDigest = {
+  headline: string;
+  attention: {
+    candidate: string;
+    role: string;
+    urgency: "high" | "medium" | "low";
+    why: string;
+    suggested_action: string;
+  }[];
+};
+
+// Factual-groundedness score produced by openevals (LLM-as-judge). score is 0–1.
+export type FactualityScore = {
+  score: number;
+  comment?: string;
+  model: string;
 };
 
 export type Stage = (typeof stageEnum.enumValues)[number];

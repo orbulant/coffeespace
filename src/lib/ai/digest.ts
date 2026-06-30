@@ -4,7 +4,7 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
 import { AI_MODEL } from "@/lib/config";
 import type { Flag } from "@/lib/rules";
-import type { ClientPreferences } from "@/db/schema";
+import type { ClientPreferences, FactualityScore } from "@/db/schema";
 
 export const DigestSchema = z.object({
   headline: z
@@ -41,7 +41,7 @@ export type DigestInput = {
 };
 
 export type DigestResult =
-  | { ok: true; object: DigestObject; model: string }
+  | { ok: true; object: DigestObject; model: string; factuality?: FactualityScore | null }
   | { ok: false; error: string };
 
 export async function synthesizeDigest(input: DigestInput): Promise<DigestResult> {

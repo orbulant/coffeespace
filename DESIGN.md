@@ -82,6 +82,11 @@ SDK with the Anthropic provider (`@ai-sdk/anthropic`).
   pure function over candidate + role + events, so it's testable, cheap, and
   trustworthy — and it's what feeds the AI digest, so the AI can't hallucinate
   problems.
+- **Momentum scoring** (`src/lib/momentum.ts`) turns the event timeline into a
+  0–100 trajectory signal per candidate (stage depth + how recently they advanced +
+  client engagement − staleness/holds), rolled up to a per-search number on the
+  overview. Every point is attributed to a named factor, so it's explainable rather
+  than a black box — a concrete answer to "is this search progressing?"
 
 ### Tradeoffs
 
@@ -137,10 +142,16 @@ the candidate page (the full structured record) always renders. The AI never blo
 a decision.
 
 **Communicating uncertainty / conflict.** This is the centerpiece, not an
-afterthought: a dedicated "Conflicts & uncertainty" card shows each disagreeing
-fact, every value with its source and date, the resolved value, and the rule used —
-plus a confidence bar and explicit open questions. The client sees the call *and*
-the doubt.
+afterthought, and it works at two levels. **Deterministically**, a "Conflicting
+information" card on every candidate page points out disagreements it can verify
+without guessing — a structured record that's gone stale relative to a newer source
+artifact (Jordan's Jun-25 email postdating the record), or a management-track title
+against an IC role (Lena) — showing *both* values and explicitly *not* resolving
+them, plus a "Conflicting info" badge on the pipeline lists. **In the AI brief**, a
+"Conflicts & uncertainty" card goes further into the free-text sources: each
+disagreeing fact, every value with its source and date, the resolved value, the
+rule used, a confidence bar, and explicit open questions. The client sees the call
+*and* the doubt.
 
 **How I'd evaluate whether it's useful.** Leading product signals: brief
 accept-without-edit rate, edit distance, and time-to-decision after a brief is

@@ -1,7 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getRole, getRoleCandidates, type EnrichedCandidate } from "@/lib/data";
-import { Card, FlagList, StageBadge, StageProgress, SectionTitle, Tag } from "@/components/ui";
+import {
+  Card,
+  FlagList,
+  StageBadge,
+  StageProgress,
+  MomentumMeter,
+  SectionTitle,
+  Tag,
+} from "@/components/ui";
 import { formatBand, formatComp, STAGE_ORDER } from "@/lib/format";
 import type { Stage } from "@/db/schema";
 
@@ -121,6 +129,10 @@ function CandidateRow({ candidate: c }: { candidate: EnrichedCandidate }) {
             <FlagList flags={c.flags} />
           </div>
         )}
+        <div className="mt-2 flex items-center gap-2">
+          <span className="text-[11px] uppercase tracking-wide text-slate-400">Momentum</span>
+          <MomentumMeter momentum={c.momentum} />
+        </div>
         <StageProgress stage={c.stage} />
       </Card>
     </Link>
